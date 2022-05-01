@@ -1,6 +1,57 @@
 {% extends 'base.html' %}
 {% block content %}
 <h1>EventWave</h1>
+
+<section class="section container" id="search">
+    <div class="row">
+        <div  class="col s12 15">
+            <h5 class="indigo-text text- darken-4">search near you</h5>
+            <div class="col s12 15offset-l2">
+                <form action="">
+                    <div class="col s3">
+                        <input type="number" id="zip">
+                        <label for="number">zip code</label>
+                    </div>
+                    <div class="col s3">
+                        <input type="number" id="radius">
+                        <label for="number">mile radius</label>
+                    </div>
+                    <div class="col s3">
+                        <input type="text" id="type">
+                        <label for="text">type of event</label>
+                    </div>
+                    <div class="col s3">
+                        <input type="submit" id="submit">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+<body>
+    
+
+<div class="row" class="flex-container">
+    <div class="col s12 15">
+    <div class="col s12 15offset-12">
+    <div class="col s8"><a href=""><h5>{{ context.title }}</h5>
+        <img src={{ context.image }} alt="Event Image" width="500" height="600"></a></div>
+    <div class="col s2"><a href=""><h6>{{ context.title }}</h6>
+        <img src={{ context.image }} alt="Event Image" width="100" height="250">
+    </a></div>
+    <div class="col s2"><a href="">
+        <img src={{ context.image }} alt="Event Image" width="100" height="250"><h6>{{ context.title }}</h6>
+    </a></div>
+  </div>
+</div>
+</div>
+
+</body>
+
+
+
+
+
 <div>
     
     <p>Event: {{ context.title }}</p>
@@ -8,5 +59,9 @@
     <p>Performer: {{ context.performer }}</p>
     <p>Type: {{ context.kind }}</p>
     
+    
 </div>
 {% endblock content %}
+
+
+
