@@ -56,7 +56,11 @@
     
     <p>Event: {{ context.title }}</p>
     <p>Date: {{ context.pub }}</p>
-    <p>Performer: {{ context.performer }}</p>
+    <p>Performer:
+        {%for performer in context.performerArray%}
+         {{performer}}
+        {% endfor %}
+        </p>
     <p>Type: {{ context.kind }}</p>
     
     
