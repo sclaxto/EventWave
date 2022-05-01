@@ -20,5 +20,5 @@ def index(request):
     kind = responseData['events'][0]['type']
 
     context = dict_of(title, seekgeek_id, url, pub, performer, kind)
-
-    return render(request, 'events/index.html', context)
+    print(context)
+    return render(request, 'events/index.html', {'context': context})
