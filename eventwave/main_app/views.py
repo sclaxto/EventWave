@@ -18,7 +18,9 @@ def index(request):
     pub = responseData['events'][0]['datetime_utc']
     performer = responseData['events'][0]['performers'][0]['name']
     kind = responseData['events'][0]['type']
+    image = responseData['events'][0]['performers'][0]['image']
 
-    context = dict_of(title, seekgeek_id, url, pub, performer, kind)
+
+    context = dict_of(title, seekgeek_id, url, pub, performer, kind, image)
     print(context)
     return render(request, 'events/index.html', {'context': context})
