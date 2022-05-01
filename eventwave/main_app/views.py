@@ -23,9 +23,9 @@ def index(request):
         performerArray.append(performer['name'])
 
     print(performerArray)
-    # performerArray = []
     kind = responseData['events'][0]['type']
+    image = responseData['events'][0]['performers'][0]['image']
 
-    context = dict_of(title, seekgeek_id, url, pub, performer, performers, performerArray, kind)
+    context = dict_of(title, seekgeek_id, url, pub, performer, performers, performerArray, kind, image)
     print(context)
     return render(request, 'events/index.html', {'context': context})
