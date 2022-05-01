@@ -38,32 +38,32 @@ def results(request):
     zip = request.GET.get('zip')
     radius = request.GET.get('radius')
     type = request.GET.get('type')
-
     query = f'{BASE_URL}geoip={zip}&range={radius}mi{PER_PAGE}{CLIENT_ID}'
 
 #     # api call
     response = requests.get(query)
     responseData = response.json()
 
-
 #     # compile variables
-    eventsContext = []
-    for event in responseData['events']:
+    if response:
+        eventsContext = []
+        for event in responseData['events']:
+            title = event['title']
+            seekgeek_id = event['id']
+            url = event['url']
+            pub = event['datetime_utc']
+            kind = event['type']
+            image = event['performers'][0]['image']
+            # performer = event['performers'][1]['name']
+            performers = event['performers']
+            performerArray = []
+            for performer in performers:
+                performerArray.append(performer['name'])
 
-        title = event['title']
-        seekgeek_id = event['id']
-        url = event['url']
-        pub = event['datetime_utc']
-        kind = event['type']
-        image = event['performers'][0]['image']
-        # performer = event['performers'][1]['name']
-        performers = event['performers']
-        performerArray = []
-        for performer in performers:
-            performerArray.append(performer['name'])
+            context = dict_of(title, seekgeek_id, url, pub, performer,
+                              performers, performerArray, kind, image)
 
-        context = dict_of(title, seekgeek_id, url, pub, performer,
-                          performers, performerArray, kind, image)
+            eventsContext.append(context)
 
-        eventsContext.append(context)
-    return render(request, 'events/results.html', {'eventsContext': eventsContext})
+        return render(request, 'events/results.html', {'eventsContext': eventsContext})
+    return redirect('/')
