@@ -33,8 +33,9 @@ def index(request):
     return render(request, 'events/index.html', {'context': context})
 
 
+
 def results(request):
-    #     # build query
+#     # build query
     zip = request.GET.get('zip')
     radius = request.GET.get('radius')
     type = request.GET.get('type')
