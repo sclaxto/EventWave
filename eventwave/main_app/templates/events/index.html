@@ -7,17 +7,17 @@
         <div  class="col s12 15">
             <h5 class="indigo-text text- darken-4">search near you</h5>
             <div class="col s12 15offset-l2">
-                <form action="">
+                <form action="/results/" method="get">
                     <div class="col s3">
-                        <input type="number" id="zip">
+                        <input type="number" id="zip" name="zip">
                         <label for="number">zip code</label>
                     </div>
                     <div class="col s3">
-                        <input type="number" id="radius">
+                        <input type="number" id="radius" name="radius">
                         <label for="number">mile radius</label>
                     </div>
                     <div class="col s3">
-                        <input type="text" id="type">
+                        <input type="text" id="type" name="type">
                         <label for="text">type of event</label>
                     </div>
                     <div class="col s3">
