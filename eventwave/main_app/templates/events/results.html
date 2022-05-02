@@ -1,0 +1,20 @@
+<h1>RESULTS PAGE</h1>
+
+
+<div>
+    
+    {%for context in eventsContext%}
+    
+    <p>Event: {{ context.title }}</p>
+    <p>Date: {{ context.pub }}</p>
+    <p>Performer:
+        {%for performer in context.performerArray%}
+         {{performer}}
+        {% endfor %}
+        </p>
+    <p>Type: {{ context.kind }}</p>
+    <img src={{ context.image }} alt="Event Image" width="200" height="150">
+    
+    {% endfor %}
+</div>
+
