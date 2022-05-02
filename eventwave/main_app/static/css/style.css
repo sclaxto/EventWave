@@ -1,6 +1,30 @@
 html {
-    padding: 0;
-    margin: 0;
-    scroll-behavior: smooth;
-    background: linear-gradient(35deg, #146aff, #ff04d1);
-  }
+  padding: 0;
+  margin: 0;
+  scroll-behavior: smooth;
+  background: linear-gradient(35deg, #146aff, #ff04d1);
+}
+
+
+.search {
+background-color: rgb(243, 241, 241);
+}
+
+.nav-wrapper {
+background-color:rgb(215, 152, 235) ;
+opacity: .9;
+}
+
+.waves-effect {
+background-color: rgb(215, 152, 235);
+}
+
+.waves-effect:hover {
+background-color: #ff04d1;
+transition: 0.9s;
+
+}
+
+.center {
+font-family: 'Audiowide', cursive;
+}

@@ -1,3 +1,4 @@
+import profile
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import login
@@ -128,7 +129,16 @@ def events_details(request, seekgeek_id):
 @login_required
 def dashboard_index(request, seekgeek_id):
     if request.method == 'GET':
-        return render(request, 'dashboard/index.html', {'context': context})
+        # get User info....
+        currentUser = User.objects.get(username=request.user.username)
+        #get Profile object..
+        currentUserProfile = Profile.objects.get(user_id=currentUser.id)
+
+        # get all events with profile.user_id
+        allEvents = Event.objects.filter(profile=currentUserProfile)
+        print(allEvents)
+
+        return render(request, 'dashboard/index.html', {'context': allEvents})
 
 
     elif request.method == 'POST':
@@ -148,7 +158,6 @@ def dashboard_index(request, seekgeek_id):
         performerArray = []
         for performer in performers:
             performerArray.append(performer['name'])
-
         if len(performerArray) > 2:
             performerString = ' '.join(performerArray[:2])
         else:
