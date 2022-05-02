@@ -1,12 +1,37 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.contrib.auth import login
+from django.contrib.auth.forms import UserCreationForm
 import requests
 from sorcery import dict_of
+
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
 BASE_URL = 'https://api.seatgeek.com/2/events?'
 PER_PAGE = '&per_page=20'
 CLIENT_ID = "&client_id=MjAxNTMyNjV8MTY1MTE4OTU5My40NDUzMzAx"
+
+
+def signup(request):
+  error_message = ''
+  if request.method == 'POST':
+    # This is how to create a 'user' form object
+    # that includes the data from the browser
+    form = UserCreationForm(request.POST)
+    if form.is_valid():
+      # This will add the user to the database
+      user = form.save()
+      # This is how we log a user in via code
+      login(request, user)
+      return redirect('/')
+    else:
+      error_message = 'Invalid sign up - try again'
+  # A bad POST or a GET request, so render signup.html with an empty form
+  form = UserCreationForm()
+  context = {'form': form, 'error_message': error_message}
+  return render(request, 'registration/signup.html', context)
 
 
 def index(request):
@@ -70,3 +95,16 @@ def results(request):
     return redirect('/')
 
 
+@login_required
+def cats_detail(request, cat_id):
+  cat = Cat.objects.get(id=cat_id)
+  # Get the toys the cat doesn't have
+  toys_cat_doesnt_have = Toy.objects.exclude(id__in = cat.toys.all().values_list('id'))
+  # Instantiate FeedingForm to be rendered in the template
+  feeding_form = FeedingForm()
+  return render(request, 'cats/detail.html', {
+    # Pass the cat and feeding_form as context
+    'cat': cat, 'feeding_form': feeding_form,
+    # Add the toys to be displayed
+    'toys': toys_cat_doesnt_have
+  })
