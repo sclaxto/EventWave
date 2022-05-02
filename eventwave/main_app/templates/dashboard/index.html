@@ -1,0 +1,13 @@
+{% extends ‘base.html’ %}
+{% block content %}
+<h1> Dashboard</h1>
+<h3>Upcoming Events</h3>
+{%for context in eventsContext%}
+    <h3>Fav Events</h3>
+    <p>Event: {{ context.title }}</p>
+    <p>Date: {{ context.pub }}</p>
+    <img src={{ context.image }} alt=“Event Image” width=“200" height=“150”>
+    {% endfor %}
+<h3>Past Events</h3>
+<p></p>
+{% endblock %}

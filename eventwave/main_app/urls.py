@@ -7,4 +7,6 @@ urlpatterns = [
     # path('events/<int:event_id>', views.event_detail, name='detail'),
     path('results/', views.results, name='results'),
     path('accounts/signup/', views.signup, name='signup'),
+    path('events/<int:seekgeek_id>', views.events_details, name='detail'),
+    path('dashboard/<int:seekgeek_id>', views.dashboard_index, name='dashboard'),
 ]

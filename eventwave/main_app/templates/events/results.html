@@ -1,3 +1,5 @@
+{% extends 'base.html' %}
+{% block content %}
 <h1>RESULTS PAGE</h1>
 
 
@@ -5,6 +7,7 @@
     
     {%for context in eventsContext%}
     
+    <p><a href="{% url 'detail' context.seekgeek_id %}">Event Details</a></p>
     <p>Event: {{ context.title }}</p>
     <p>Date: {{ context.pub }}</p>
     <p>Performer:
@@ -19,3 +22,4 @@
     {% endfor %}
 </div>
 
+{% endblock content %}

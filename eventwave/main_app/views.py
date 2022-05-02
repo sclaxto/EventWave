@@ -1,8 +1,10 @@
+import profile
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 import requests
+from .models import User, Event, Profile
 from sorcery import dict_of
 
 from django.contrib.auth.decorators import login_required
@@ -25,6 +27,12 @@ def signup(request):
       user = form.save()
       # This is how we log a user in via code
       login(request, user)
+
+      # Create Profile object for user
+      newUser = User.objects.get(username=user.username)
+      newProfile = Profile(user=newUser)
+      newProfile.save()
+
       return redirect('/')
     else:
       error_message = 'Invalid sign up - try again'
@@ -95,16 +103,74 @@ def results(request):
     return redirect('/')
 
 
+# @login_required
+def events_details(request, seekgeek_id):
+    query = f'{BASE_URL}id={seekgeek_id}{CLIENT_ID}'
+    # API Call
+    response = requests.get(query)
+    responseData = response.json()
+
+    # Build Context
+    title = responseData['events'][0]['title']
+    seekgeek_id = responseData['events'][0]['id']
+    url = responseData['events'][0]['url']
+    pub = responseData['events'][0]['datetime_utc']
+    performers = responseData['events'][0]['performers']
+    performerArray = []
+    for performer in performers:
+        performerArray.append(performer['name'])
+    kind = responseData['events'][0]['type']
+    image = responseData['events'][0]['performers'][0]['image']
+    context = dict_of(title, seekgeek_id, url, pub, performer,
+                      performers, performerArray, kind, image)
+    return render(request, 'events/detail.html', {'context': context})
+
+
 @login_required
-def cats_detail(request, cat_id):
-  cat = Cat.objects.get(id=cat_id)
-  # Get the toys the cat doesn't have
-  toys_cat_doesnt_have = Toy.objects.exclude(id__in = cat.toys.all().values_list('id'))
-  # Instantiate FeedingForm to be rendered in the template
-  feeding_form = FeedingForm()
-  return render(request, 'cats/detail.html', {
-    # Pass the cat and feeding_form as context
-    'cat': cat, 'feeding_form': feeding_form,
-    # Add the toys to be displayed
-    'toys': toys_cat_doesnt_have
-  })
+def dashboard_index(request, seekgeek_id):
+    if request.method == 'GET':
+        # get User info....
+        currentUser = User.objects.get(username=request.user.username)
+        #get Profile object..
+        currentUserProfile = Profile.objects.get(user_id=currentUser.id)
+
+        # get all events with profile.user_id
+        allEvents = Event.objects.filter(profile=currentUserProfile)
+        print(allEvents)
+
+        return render(request, 'dashboard/index.html', {'context': allEvents})
+
+
+    elif request.method == 'POST':
+        query = f'{BASE_URL}id={seekgeek_id}{CLIENT_ID}'
+        # API Call
+        response = requests.get(query)
+        responseData = response.json()
+
+        # Build Context
+        title = responseData['events'][0]['title']
+        seekgeek_id = responseData['events'][0]['id']
+        url = responseData['events'][0]['url']
+        pub = responseData['events'][0]['datetime_utc']
+        kind = responseData['events'][0]['type']
+        image = responseData['events'][0]['performers'][0]['image']
+        performers = responseData['events'][0]['performers']
+        performerArray = []
+        for performer in performers:
+            performerArray.append(performer['name'])
+        if len(performerArray) > 2:
+            performerString = ' '.join(performerArray[:2])
+        else:
+            performerString = ' '.join(performerArray)
+
+        # get User info....
+        currentUser = User.objects.get(username=request.user.username)
+        #get Profile object..
+        currentUserProfile = Profile.objects.get(user_id=currentUser.id)
+        
+        myEvent = Event(title=title, seekgeek_id=seekgeek_id,
+                        url=url, pub=pub, performer=performerString, kind=kind, profile=currentUserProfile)
+        myEvent.save()
+        
+
+        return render(request, 'events/detail.html')

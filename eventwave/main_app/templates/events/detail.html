@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Details PAGE</h1>
+
+
+<div>
+    
+
+    <p>Event: {{ context.title }}</p>
+    <p>Tickets: <a href='{{ context.url }}'> {{ context.url }} </a></p>
+    <p>Date: {{ context.pub }}</p>
+    <p>Performer:
+        {%for performer in context.performerArray%}
+         {{performer}}
+        {% endfor %}
+        </p>
+    <p>Type: {{ context.kind }}</p>
+    <img src={{ context.image }} alt="Event Image" width="200" height="150">
+    
+    <form action="/dashboard/{{ context.seekgeek_id }}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="event_list" value="Add To Event List" />
+        <button class="link_button" type="submit">Add to Event List</button>
+    </form>
+    
+</div>
+
+{% endblock content %}
