@@ -68,3 +68,5 @@ def results(request):
 
         return render(request, 'events/results.html', {'eventsContext': eventsContext})
     return redirect('/')
+
+
