@@ -182,5 +182,6 @@ def dashboard_index(request):
     # get Profile object..
     currentUserProfile = Profile.objects.get(user_id=currentUser.id)
     # get all events with profile.user_id
-    allEvents = Event.objects.filter(profile=currentUserProfile)
+    allEvents = Event.objects.filter(
+        profile=currentUserProfile).order_by('pub')
     return render(request, 'dashboard/index.html', {'context': allEvents})

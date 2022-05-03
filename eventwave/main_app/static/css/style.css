@@ -1,3 +1,18 @@
+@font-face {
+  font-family: "Happy Talk";
+  src: url("../assets/HappyTalk-Oon8.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Fox Cavalier";
+  src: url("../assets/FoxCavalier-WyzrE.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "OpenBrush";
+  src: url("../assets/OpenBrush.ttf") format("truetype");
+}
+
 #bg {
   position: fixed; 
   top: -50%; 
@@ -6,6 +21,7 @@
   height: 200%;
   z-index: -1;
 }
+
 #bg img {
   position: absolute; 
   top: 0; 
@@ -18,24 +34,45 @@
   z-index: -1;
 }
 
+html {
+  padding: 0;
+  margin: 0;
+  scroll-behavior: smooth;
+  background: linear-gradient(35deg, #88AFF2, #FF1FD6);
+}
 .search {
 background-color: rgb(243, 241, 241);
 }
-
 .nav-wrapper {
 background-color:rgb(215, 152, 235) ;
 opacity: .9;
 }
-
 .waves-effect {
 background-color: rgb(215, 152, 235);
 }
-
 .waves-effect:hover {
-background-color: #ff04d1;
+background-color: #FF04D1;
 transition: 0.9s;
 }
 
-.center {
-font-family: 'Audiowide', cursive;
+h1>a {
+font-family: Fox Cavalier;
+text-shadow: 40px rgb(192, 193, 255);
+font-size: 75px;
+}
+.right .search {
+  font-family: Happy Talk;
+  font-size: 15px;
+}
+.slogan {
+  font-family: OpenBrush;
+  font-size: 50px;
+  color: silver;
+}
+h1 {
+  text-align: center;
+}
+.container {
+  font-family: OpenBrush;
+  color: white;
 }
