@@ -10,13 +10,12 @@ from sorcery import dict_of
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-# Create your views here.
 BASE_URL = 'https://api.seatgeek.com/2/events?'
 PER_PAGE = '&per_page=20'
 CLIENT_ID = "&client_id=MjAxNTMyNjV8MTY1MTE4OTU5My40NDUzMzAx"
 
-
 def signup(request):
+    """Create's a User and Profile in the database"""
     error_message = ''
     if request.method == 'POST':
         # This is how to create a 'user' form object
@@ -43,6 +42,7 @@ def signup(request):
 
 
 def index(request):
+    """Functions makes an API call to get event data for Landing Page"""
     response = requests.get(
         "https://api.seatgeek.com/2/events?q=gorillaz&per_page=1&client_id=MjAxNTMyNjV8MTY1MTE4OTU5My40NDUzMzAx")
 
@@ -67,7 +67,8 @@ def index(request):
 
 
 def results(request):
-    #     # build query
+    """Function makes an API call based on search parameters of user"""
+#     # build query
     zip = request.GET.get('zip')
     radius = request.GET.get('radius')
     type = request.GET.get('type')
@@ -95,7 +96,6 @@ def results(request):
 
             context = dict_of(title, seekgeek_id, url, pub, performer,
                               performers, performerArray, kind, image)
-
             eventsContext.append(context)
 
         return render(request, 'events/results.html', {'eventsContext': eventsContext})
@@ -104,6 +104,7 @@ def results(request):
 
 # @login_required
 def events_details(request, seekgeek_id):
+    """Function makes an API call to gather data for the detail's page"""
     query = f'{BASE_URL}id={seekgeek_id}{CLIENT_ID}'
     # API Call
     response = requests.get(query)
@@ -127,18 +128,16 @@ def events_details(request, seekgeek_id):
 
 @login_required
 def dashboard_delete(request, event_id):
-    # get User info....
-    currentUser = User.objects.get(username=request.user.username)
-    # get Profile object..
-    currentUserProfile = Profile.objects.get(user_id=currentUser.id)
-
-    eventToDelete = Event.objects.filter(event_id=event_id)
+    """Function deletes event from user's dashboard"""
+    eventToDelete = Event.objects.filter(id=event_id)
     eventToDelete.delete()
     return redirect('dashboard')
 
 
 @login_required
 def dashboard_add(request, seekgeek_id):
+    """Function makes API call to gather data about event.
+    Data is then stored in database and associated with User"""
     query = f'{BASE_URL}id={seekgeek_id}{CLIENT_ID}'
     # API Call
     response = requests.get(query)
@@ -173,12 +172,11 @@ def dashboard_add(request, seekgeek_id):
 
 @login_required
 def dashboard_index(request):
+    """Function gets all events associated with a User"""
     # get User info....
     currentUser = User.objects.get(username=request.user.username)
     # get Profile object..
     currentUserProfile = Profile.objects.get(user_id=currentUser.id)
-
     # get all events with profile.user_id
     allEvents = Event.objects.filter(profile=currentUserProfile)
-
     return render(request, 'dashboard/index.html', {'context': allEvents})

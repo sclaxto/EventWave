@@ -7,7 +7,7 @@
     <p>Event: {{ event.title }}</p>
     <p>Date: {{ event.pub }}</p>
     <img src={{ event.image }} alt=“Event Image” width=“200" height=“150”>
-    <form action="/dashboard/{{ event.id }}/delete" method="post">
+    <form action="/dashboard/{{ event.pk }}/delete" method="post">
         {% csrf_token %}
         <input type="hidden" name="DELETE" value="Delete Event" />
         <button class="link_button" type="submit">Delete Event</button>

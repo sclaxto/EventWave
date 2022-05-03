@@ -11,6 +11,6 @@ urlpatterns = [
     path('dashboard/', views.dashboard_index, name='dashboard'),
     path('dashboard/<int:seekgeek_id>',
          views.dashboard_add, name='dashboard_add'),
-    path('dashboard/<int:seekgeek_id>/delete',
+    path('dashboard/<int:event_id>/delete',
          views.dashboard_delete, name='dashboard_delete'),
 ]
