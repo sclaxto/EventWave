@@ -44,7 +44,7 @@ def signup(request):
 def index(request):
     """Functions makes an API call to get event data for Landing Page"""
     response = requests.get(
-        "https://api.seatgeek.com/2/events?q=gorillaz&per_page=1&client_id=MjAxNTMyNjV8MTY1MTE4OTU5My40NDUzMzAx")
+        "https://api.seatgeek.com/2/events?performers.slug=kiss&per_page=1&client_id=MjAxNTMyNjV8MTY1MTE4OTU5My40NDUzMzAx")
 
     responseData = response.json()
 
@@ -52,7 +52,7 @@ def index(request):
     seekgeek_id = responseData['events'][0]['id']
     url = responseData['events'][0]['url']
     pub = responseData['events'][0]['datetime_utc']
-    performer = responseData['events'][0]['performers'][3]['name']
+    performer = responseData['events'][0]['performers'][0]['name']
     performers = responseData['events'][0]['performers']
     performerArray = []
     for performer in performers:
@@ -185,3 +185,7 @@ def dashboard_index(request):
     allEvents = Event.objects.filter(
         profile=currentUserProfile).order_by('pub')
     return render(request, 'dashboard/index.html', {'context': allEvents})
+
+
+def about(request):
+    return render(request, 'about/about.html')

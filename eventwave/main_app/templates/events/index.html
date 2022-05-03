@@ -7,7 +7,7 @@
 <section class="container">
     <div class="row">
         <div  class="col s12 15">
-            <h5>search near you</h5>
+            <h5 id="search">search near you</h5>
             <div class="col s12 15offset-l2">
                 <form action="/results/" method="get">
                 <div class="search">
@@ -39,13 +39,13 @@
 <body>
     <section class="promote">
         <div class="row">
-              <div class="col s7 push-s5"><span class="flow-text"><a href=""><h5>{{ context.title }}</h5>
-                <img src={{ context.image }} alt="Event Image" width="500" height="600"></a></span></div>
-              <div class="col s5 pull-s7"><span class="flow-text"><a href=""><h6>Mavericks Vs Suns<br>Game 3</h6>
-                <img src="/static/assets/mavericks-vs-suns.jpg" alt="" width="300" height="250">
+              <div class="col s7 push-s5"><span class="flow-text"><a href="{% url 'detail' context.seekgeek_id %}"><h5>{{ context.title }}</h5>
+                <img src={{ context.image }} alt="Event Image" width="590" height="450"></a></span></div>
+              <div class="col s5 pull-s7"><span class="flow-text"><a href="{% url 'detail' 5653791 %}"><h6>Mavericks Vs Suns<br>Game 3</h6>
+                <img src="/static/assets/mavericks-vs-suns.jpg" alt="" >
             </a></span></div>
-            <div class="col s5 pull-s7"><span class="flow-text"><a href=""><h6>{{ context.title }}</h6>
-                <img src={{ context.image }} alt="Event Image" width="150" height="250">
+            <div class="col s5 pull-s7"><span class="flow-text"><a href="{% url 'detail' 5405670 %}"><h6>Aladdin - New York </h6>
+                <img src="/static/assets/aladdin.jpeg" alt="Event Image">
             </a></span></div>
             </div>
         </section>

@@ -13,4 +13,5 @@ urlpatterns = [
          views.dashboard_add, name='dashboard_add'),
     path('dashboard/<int:event_id>/delete',
          views.dashboard_delete, name='dashboard_delete'),
+    path('about/', views.about, name='about')
 ]

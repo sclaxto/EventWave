@@ -3,25 +3,25 @@
 <h1>Details PAGE</h1>
 
 
-<div>
-    
-
-    <p>Event: {{ context.title }}</p>
-    <p>Tickets: <a href='{{ context.url }}'> {{ context.url }} </a></p>
-    <p>Date: {{ context.pub }}</p>
-    <p>Performer:
+<div class="result">
+    <ul class="collection with-header" id="collection">
+    <li class="collection-header" id="collection-item">Event: {{ context.title }}</li>
+    <li class="collection-header" id="collection-item">Tickets: <a href='{{ context.url }}'> {{ context.url }} </a></li>
+    <li class="collection-header" id="collection-item">Date: {{ context.pub }}</li>
+    <li class="collection-header" id="collection-item">Performer:
         {%for performer in context.performerArray%}
          {{performer}}
         {% endfor %}
-        </p>
-    <p>Type: {{ context.kind }}</p>
-    <img src={{ context.image }} alt="Event Image" width="200" height="150">
+    </li>
+    <li class="collection-header" id="collection-item">Type: {{ context.kind }}</li>
+    <li class="collection-header" id="collection-item"><img src={{ context.image }} alt="Event Image"></li>
     
-    <form action="/dashboard/{{ context.seekgeek_id }}" method="post">
+    <li class="collection-header" id="collection-item"><form action="/dashboard/{{ context.seekgeek_id }}" method="post">
         {% csrf_token %}
         <input type="hidden" name="POST" value="Add To Event List" />
-        <button class="link_button" type="submit">Add to Event List</button>
-    </form>
+        <button class="waves-effect waves-light btn" type="submit">Add to Event List</button>
+    </form></li>
+</ul>
     
 </div>
 
