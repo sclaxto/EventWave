@@ -1,10 +1,22 @@
-html {
-  padding: 0;
-  margin: 0;
-  scroll-behavior: smooth;
-  background: linear-gradient(35deg, #88aff2, #ff1fd6);
+#bg {
+  position: fixed; 
+  top: -50%; 
+  left: -50%; 
+  width: 200%; 
+  height: 200%;
+  z-index: -1;
 }
-
+#bg img {
+  position: absolute; 
+  top: 0; 
+  left: 0; 
+  right: 0; 
+  bottom: 0; 
+  margin: auto; 
+  min-width: 50%;
+  min-height: 50%;
+  z-index: -1;
+}
 
 .search {
 background-color: rgb(243, 241, 241);
@@ -22,7 +34,6 @@ background-color: rgb(215, 152, 235);
 .waves-effect:hover {
 background-color: #ff04d1;
 transition: 0.9s;
-
 }
 
 .center {

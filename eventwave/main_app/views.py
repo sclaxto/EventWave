@@ -71,8 +71,12 @@ def results(request):
 #     # build query
     zip = request.GET.get('zip')
     radius = request.GET.get('radius')
-    type = request.GET.get('type')
-    query = f'{BASE_URL}geoip={zip}&range={radius}mi{PER_PAGE}{CLIENT_ID}'
+    start = request.GET.get('start')
+    end = request.GET.get('end')
+    if start == '' or end == '':
+        query = f'{BASE_URL}geoip={zip}&range={radius}mi{PER_PAGE}{CLIENT_ID}'
+    else:
+        query = f'{BASE_URL}geoip={zip}&range={radius}mi{PER_PAGE}&datetime_utc.gte={start}&datetime_utc.lte={end}{CLIENT_ID}'
 
 #     # api call
     response = requests.get(query)
