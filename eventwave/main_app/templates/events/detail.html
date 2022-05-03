@@ -19,7 +19,7 @@
     
     <form action="/dashboard/{{ context.seekgeek_id }}" method="post">
         {% csrf_token %}
-        <input type="hidden" name="event_list" value="Add To Event List" />
+        <input type="hidden" name="POST" value="Add To Event List" />
         <button class="link_button" type="submit">Add to Event List</button>
     </form>
     
