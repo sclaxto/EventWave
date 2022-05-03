@@ -10,39 +10,39 @@ from sorcery import dict_of
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-# Create your views here.
 BASE_URL = 'https://api.seatgeek.com/2/events?'
 PER_PAGE = '&per_page=20'
 CLIENT_ID = "&client_id=MjAxNTMyNjV8MTY1MTE4OTU5My40NDUzMzAx"
 
-
 def signup(request):
-  error_message = ''
-  if request.method == 'POST':
-    # This is how to create a 'user' form object
-    # that includes the data from the browser
-    form = UserCreationForm(request.POST)
-    if form.is_valid():
-      # This will add the user to the database
-      user = form.save()
-      # This is how we log a user in via code
-      login(request, user)
+    """Create's a User and Profile in the database"""
+    error_message = ''
+    if request.method == 'POST':
+        # This is how to create a 'user' form object
+        # that includes the data from the browser
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            # This will add the user to the database
+            user = form.save()
+            # This is how we log a user in via code
+            login(request, user)
 
-      # Create Profile object for user
-      newUser = User.objects.get(username=user.username)
-      newProfile = Profile(user=newUser)
-      newProfile.save()
+            # Create Profile object for user
+            newUser = User.objects.get(username=user.username)
+            newProfile = Profile(user=newUser)
+            newProfile.save()
 
-      return redirect('/')
-    else:
-      error_message = 'Invalid sign up - try again'
-  # A bad POST or a GET request, so render signup.html with an empty form
-  form = UserCreationForm()
-  context = {'form': form, 'error_message': error_message}
-  return render(request, 'registration/signup.html', context)
+            return redirect('/')
+        else:
+            error_message = 'Invalid sign up - try again'
+    # A bad POST or a GET request, so render signup.html with an empty form
+    form = UserCreationForm()
+    context = {'form': form, 'error_message': error_message}
+    return render(request, 'registration/signup.html', context)
 
 
 def index(request):
+    """Functions makes an API call to get event data for Landing Page"""
     response = requests.get(
         "https://api.seatgeek.com/2/events?q=gorillaz&per_page=1&client_id=MjAxNTMyNjV8MTY1MTE4OTU5My40NDUzMzAx")
 
@@ -66,8 +66,8 @@ def index(request):
     return render(request, 'events/index.html', {'context': context})
 
 
-
 def results(request):
+    """Function makes an API call based on search parameters of user"""
 #     # build query
     zip = request.GET.get('zip')
     radius = request.GET.get('radius')
@@ -96,7 +96,6 @@ def results(request):
 
             context = dict_of(title, seekgeek_id, url, pub, performer,
                               performers, performerArray, kind, image)
-
             eventsContext.append(context)
 
         return render(request, 'events/results.html', {'eventsContext': eventsContext})
@@ -105,6 +104,7 @@ def results(request):
 
 # @login_required
 def events_details(request, seekgeek_id):
+    """Function makes an API call to gather data for the detail's page"""
     query = f'{BASE_URL}id={seekgeek_id}{CLIENT_ID}'
     # API Call
     response = requests.get(query)
@@ -127,50 +127,56 @@ def events_details(request, seekgeek_id):
 
 
 @login_required
-def dashboard_index(request, seekgeek_id):
-    if request.method == 'GET':
-        # get User info....
-        currentUser = User.objects.get(username=request.user.username)
-        #get Profile object..
-        currentUserProfile = Profile.objects.get(user_id=currentUser.id)
-
-        # get all events with profile.user_id
-        allEvents = Event.objects.filter(profile=currentUserProfile)
-        print(allEvents)
-
-        return render(request, 'dashboard/index.html', {'context': allEvents})
+def dashboard_delete(request, event_id):
+    """Function deletes event from user's dashboard"""
+    eventToDelete = Event.objects.filter(id=event_id)
+    eventToDelete.delete()
+    return redirect('dashboard')
 
 
-    elif request.method == 'POST':
-        query = f'{BASE_URL}id={seekgeek_id}{CLIENT_ID}'
-        # API Call
-        response = requests.get(query)
-        responseData = response.json()
+@login_required
+def dashboard_add(request, seekgeek_id):
+    """Function makes API call to gather data about event.
+    Data is then stored in database and associated with User"""
+    query = f'{BASE_URL}id={seekgeek_id}{CLIENT_ID}'
+    # API Call
+    response = requests.get(query)
+    responseData = response.json()
 
-        # Build Context
-        title = responseData['events'][0]['title']
-        seekgeek_id = responseData['events'][0]['id']
-        url = responseData['events'][0]['url']
-        pub = responseData['events'][0]['datetime_utc']
-        kind = responseData['events'][0]['type']
-        image = responseData['events'][0]['performers'][0]['image']
-        performers = responseData['events'][0]['performers']
-        performerArray = []
-        for performer in performers:
-            performerArray.append(performer['name'])
-        if len(performerArray) > 2:
-            performerString = ' '.join(performerArray[:2])
-        else:
-            performerString = ' '.join(performerArray)
+    # Build Context
+    title = responseData['events'][0]['title']
+    seekgeek_id = responseData['events'][0]['id']
+    url = responseData['events'][0]['url']
+    pub = responseData['events'][0]['datetime_utc']
+    kind = responseData['events'][0]['type']
+    image = responseData['events'][0]['performers'][0]['image']
+    performers = responseData['events'][0]['performers']
+    performerArray = []
+    for performer in performers:
+        performerArray.append(performer['name'])
+    if len(performerArray) > 2:
+        performerString = ' '.join(performerArray[:2])
+    else:
+        performerString = ' '.join(performerArray)
 
-        # get User info....
-        currentUser = User.objects.get(username=request.user.username)
-        #get Profile object..
-        currentUserProfile = Profile.objects.get(user_id=currentUser.id)
-        
-        myEvent = Event(title=title, seekgeek_id=seekgeek_id,
-                        url=url, pub=pub, performer=performerString, kind=kind, profile=currentUserProfile)
-        myEvent.save()
-        
+    # get User info....
+    currentUser = User.objects.get(username=request.user.username)
+    # get Profile object..
+    currentUserProfile = Profile.objects.get(user_id=currentUser.id)
 
-        return render(request, 'events/detail.html')
+    myEvent = Event(title=title, seekgeek_id=seekgeek_id,
+                    url=url, pub=pub, performer=performerString, kind=kind, image=image, profile=currentUserProfile)
+    myEvent.save()
+    return redirect('dashboard')
+
+
+@login_required
+def dashboard_index(request):
+    """Function gets all events associated with a User"""
+    # get User info....
+    currentUser = User.objects.get(username=request.user.username)
+    # get Profile object..
+    currentUserProfile = Profile.objects.get(user_id=currentUser.id)
+    # get all events with profile.user_id
+    allEvents = Event.objects.filter(profile=currentUserProfile)
+    return render(request, 'dashboard/index.html', {'context': allEvents})

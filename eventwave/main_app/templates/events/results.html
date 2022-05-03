@@ -1,23 +1,32 @@
-{% extends 'base.html' %}
-{% block content %}
 <h1>RESULTS PAGE</h1>
 
 
 <div>
     
     {%for context in eventsContext%}
+
+
+
+    <div class="result">
+    <ul class="collection with-header">
+        <li><img src={{ context.image }} alt="Event Image" width="200" height="150"></li>
+        <li class="collection-header"><h4>Event: {{ context.title }}</h4><br><a href="{% url 'detail' context.seekgeek_id %}">Event Details</a>
+        </li>
+        <li class="collection-item">Date: {{ context.pub }}</li>
+        <li class="collection-item">Performer:
+            {%for performer in context.performerArray%}
+             {{performer}}
+            {% endfor %}</li>
+        <li class="collection-item">Type: {{ context.kind }}</li>
+        
+      </ul>
+      </div>
+
+
+
+
     
-    <p><a href="{% url 'detail' context.seekgeek_id %}">Event Details</a></p>
-    <p>Event: {{ context.title }}</p>
-    <p>Date: {{ context.pub }}</p>
-    <p>Performer:
-        {%for performer in context.performerArray%}
-         {{performer}}
-        {% endfor %}
-        </p>
-    <p>Type: {{ context.kind }}</p>
-    <img src={{ context.image }} alt="Event Image" width="200" height="150">
-    
+   
     
     {% endfor %}
 </div>

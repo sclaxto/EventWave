@@ -1,13 +1,18 @@
-{% extends ‘base.html’ %}
+{% extends 'base.html' %}
 {% block content %}
 <h1> Dashboard</h1>
 <h3>Upcoming Events</h3>
-{%for context in eventsContext%}
+{%for event in context%}
     <h3>Fav Events</h3>
-    <p>Event: {{ context.title }}</p>
-    <p>Date: {{ context.pub }}</p>
-    <img src={{ context.image }} alt=“Event Image” width=“200" height=“150”>
-    {% endfor %}
+    <p>Event: {{ event.title }}</p>
+    <p>Date: {{ event.pub }}</p>
+    <img src={{ event.image }} alt=“Event Image” width=“200" height=“150”>
+    <form action="/dashboard/{{ event.pk }}/delete" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="DELETE" value="Delete Event" />
+        <button class="link_button" type="submit">Delete Event</button>
+    </form>
+{% endfor %}
 <h3>Past Events</h3>
 <p></p>
 {% endblock %}
