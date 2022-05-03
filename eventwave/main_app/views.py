@@ -71,8 +71,12 @@ def results(request):
 #     # build query
     zip = request.GET.get('zip')
     radius = request.GET.get('radius')
-    type = request.GET.get('type')
-    query = f'{BASE_URL}geoip={zip}&range={radius}mi{PER_PAGE}{CLIENT_ID}'
+    start = request.GET.get('start')
+    end = request.GET.get('end')
+    if start == '' or end == '':
+        query = f'{BASE_URL}geoip={zip}&range={radius}mi{PER_PAGE}{CLIENT_ID}'
+    else:
+        query = f'{BASE_URL}geoip={zip}&range={radius}mi{PER_PAGE}&datetime_utc.gte={start}&datetime_utc.lte={end}{CLIENT_ID}'
 
 #     # api call
     response = requests.get(query)
@@ -178,5 +182,6 @@ def dashboard_index(request):
     # get Profile object..
     currentUserProfile = Profile.objects.get(user_id=currentUser.id)
     # get all events with profile.user_id
-    allEvents = Event.objects.filter(profile=currentUserProfile)
+    allEvents = Event.objects.filter(
+        profile=currentUserProfile).order_by('pub')
     return render(request, 'dashboard/index.html', {'context': allEvents})
