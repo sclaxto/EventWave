@@ -96,6 +96,7 @@ label {
   letter-spacing: 2px;
 }
 .container {
+  display: flex;
   font-family: OpenBrush;
   color: white;
 }
@@ -137,6 +138,7 @@ label {
   max-height: 350px;
   margin: 2em;
 }
+
 .row {
   border: 5px dotted rgba(248, 245, 248, 0.644);
   border-radius: 30px;
