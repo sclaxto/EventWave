@@ -96,7 +96,6 @@ label {
   letter-spacing: 2px;
 }
 .container {
-  display: flex;
   font-family: OpenBrush;
   color: white;
 }
@@ -154,3 +153,7 @@ h5, h6 {
   text-align: center;
 }
 
+#results-img {
+  text-align: center;
+  background-color: transparent;
+}

@@ -10,7 +10,7 @@
     <ul class="collection with-header" id="collection">
         <li class="collection-header" id="collection-item"><h4>Event: {{ context.title }}</h4><br><a href="{% url 'detail' context.seekgeek_id %}">Event Details</a>
         </li>
-        <li><img responsive-img src={{ context.image }} alt="Event Image"></li>
+        <li id="results-img"><img class='responsive-img' src={{ context.image }} alt="Event Image"></li>
     
         <li class="collection-item" id="collection-item" >Date: {{ context.pub }}</li>
         <li class="collection-item" id="collection-item">Performer:

@@ -1,4 +1,5 @@
 import profile
+import string
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import login
@@ -13,6 +14,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 BASE_URL = 'https://api.seatgeek.com/2/events?'
 PER_PAGE = '&per_page=20'
 CLIENT_ID = "&client_id=MjAxNTMyNjV8MTY1MTE4OTU5My40NDUzMzAx"
+
 
 def signup(request):
     """Create's a User and Profile in the database"""
@@ -127,8 +129,24 @@ def events_details(request, seekgeek_id):
         performerArray.append(performer['name'])
     kind = responseData['events'][0]['type']
     image = responseData['events'][0]['performers'][0]['image']
+
     context = dict_of(title, seekgeek_id, url, pub, performer,
                       performers, performerArray, kind, image)
+
+    name_v2 = responseData['events'][0]['venue']['name_v2'].replace(" ", "+")
+    address = responseData['events'][0]['venue']['address'].replace(" ", "+")
+    extended_address = responseData['events'][0]['venue']['extended_address'].replace(
+        " ", "+")
+
+    googleEventTitle = title.replace(" ", "+")
+    googleEventStart = pub.translate(str.maketrans('', '', string.punctuation))
+    googleEventEnd = str(int(googleEventStart.replace("T", "")) + 1)
+    googleEventEnd = googleEventEnd[:8] + 'T' + googleEventEnd[8:]
+    googleEventDetails = f'&details=For+details,+link+here:+{url}'
+    googleEventAddress = f'&location={name_v2}{address}{extended_address}'
+
+    context['googleEventCalendarURL'] = f'https://calendar.google.com/calendar/r/eventedit?text={googleEventTitle}&dates={googleEventStart}/{googleEventEnd}{googleEventDetails}{googleEventAddress}'
+    
     return render(request, 'events/detail.html', {'context': context})
 
 

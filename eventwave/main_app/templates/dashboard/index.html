@@ -8,12 +8,18 @@
     <ul class="collection with-header" id="collection">
       <li class="collection-header" id="collection-item"> <h4>Event: {{ event.title }}</h4></li>
       <li class="collection-item" id="collection-item">Date: {{ event.pub }}</li>
-      <li class="collection-item" id="collection-item"><img class="responsive-img" src={{ event.image }} alt=“Event Image”></li>
-      <li class="collection-item" id="collection-item"><form action="/dashboard/{{ event.pk }}/delete" method="post">
+      <li id="results-img" class="collection-item" id="collection-item"><img class="responsive-img" src={{ event.image }} alt=“Event Image”></li>
+      
+      <li class="collection-header" id="collection-item" style="text-align: center;"><button class="waves-effect waves-light btn"><a style="text-decoration: none; color: inherit;" href='{% url 'detail' event.seekgeek_id %}'> Event Details </button> </li>
+       
+
+      <li class="collection-item" id="collection-item">
+        <form action="/dashboard/{{ event.pk }}/delete" method="post">
         {% csrf_token %}
         <input type="hidden" name="DELETE" value="Delete Event" />
         <button class="waves-effect waves-light btn" type="submit">Delete Event</button>
-      </form></li>
+      </form>
+    </li>
     </ul>
   </div>
 
