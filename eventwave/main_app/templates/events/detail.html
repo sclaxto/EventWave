@@ -14,7 +14,7 @@
         {% endfor %}
     </li>
     <li class="collection-header" id="collection-item">Type: {{ context.kind }}</li>
-    <li class="collection-header" id="collection-item"><img src={{ context.image }} alt="Event Image"></li>
+    <li class="collection-header" id="collection-item"><img class="responsive-img" src={{ context.image }} alt="Event Image"></li>
     
     <li class="collection-header" id="collection-item"><form action="/dashboard/{{ context.seekgeek_id }}" method="post">
         {% csrf_token %}

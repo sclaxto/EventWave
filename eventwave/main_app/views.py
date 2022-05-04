@@ -45,9 +45,9 @@ def index(request):
     """Functions makes an API call to get event data for Landing Page"""
     response = requests.get(
         "https://api.seatgeek.com/2/events?performers.slug=kiss&per_page=1&client_id=MjAxNTMyNjV8MTY1MTE4OTU5My40NDUzMzAx")
-
+    # converts response to JSON objects
     responseData = response.json()
-
+    # variables from API
     title = responseData['events'][0]['title']
     seekgeek_id = responseData['events'][0]['id']
     url = responseData['events'][0]['url']
@@ -55,6 +55,7 @@ def index(request):
     performer = responseData['events'][0]['performers'][0]['name']
     performers = responseData['events'][0]['performers']
     performerArray = []
+    # creates an array of performers for each event
     for performer in performers:
         performerArray.append(performer['name'])
 
@@ -68,11 +69,12 @@ def index(request):
 
 def results(request):
     """Function makes an API call based on search parameters of user"""
-#     # build query
+#     # build query based on search parameters index page
     zip = request.GET.get('zip')
     radius = request.GET.get('radius')
     start = request.GET.get('start')
     end = request.GET.get('end')
+    # if start and end was not entered
     if start == '' or end == '':
         query = f'{BASE_URL}geoip={zip}&range={radius}mi{PER_PAGE}{CLIENT_ID}'
     else:
@@ -106,7 +108,7 @@ def results(request):
     return redirect('/')
 
 
-# @login_required
+@login_required
 def events_details(request, seekgeek_id):
     """Function makes an API call to gather data for the detail's page"""
     query = f'{BASE_URL}id={seekgeek_id}{CLIENT_ID}'
@@ -114,7 +116,7 @@ def events_details(request, seekgeek_id):
     response = requests.get(query)
     responseData = response.json()
 
-    # Build Context
+    # Build Context for event selected
     title = responseData['events'][0]['title']
     seekgeek_id = responseData['events'][0]['id']
     url = responseData['events'][0]['url']
@@ -131,6 +133,7 @@ def events_details(request, seekgeek_id):
 
 
 @login_required
+# delete event from users dashboard
 def dashboard_delete(request, event_id):
     """Function deletes event from user's dashboard"""
     eventToDelete = Event.objects.filter(id=event_id)
@@ -139,6 +142,7 @@ def dashboard_delete(request, event_id):
 
 
 @login_required
+# add event to users dashboard
 def dashboard_add(request, seekgeek_id):
     """Function makes API call to gather data about event.
     Data is then stored in database and associated with User"""
@@ -147,7 +151,7 @@ def dashboard_add(request, seekgeek_id):
     response = requests.get(query)
     responseData = response.json()
 
-    # Build Context
+    # Build Context and saved to database
     title = responseData['events'][0]['title']
     seekgeek_id = responseData['events'][0]['id']
     url = responseData['events'][0]['url']
@@ -167,7 +171,7 @@ def dashboard_add(request, seekgeek_id):
     currentUser = User.objects.get(username=request.user.username)
     # get Profile object..
     currentUserProfile = Profile.objects.get(user_id=currentUser.id)
-
+    # all variables used to save to event
     myEvent = Event(title=title, seekgeek_id=seekgeek_id,
                     url=url, pub=pub, performer=performerString, kind=kind, image=image, profile=currentUserProfile)
     myEvent.save()
