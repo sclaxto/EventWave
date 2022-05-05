@@ -157,3 +157,17 @@ h5, h6 {
   text-align: center;
   background-color: transparent;
 }
+
+#signup {
+  font-size: 25px;
+  letter-spacing: 2px;
+}
+
+.about {
+  font-size: 26px;
+  letter-spacing: 2px;
+}
+.about_title {
+  letter-spacing: 3px;
+  text-decoration: underline;
+}
