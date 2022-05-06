@@ -32,7 +32,7 @@ By Hazel M, Mark F, Miguel D and Shawna C
 - Django
 - HTML
 - CSS
-- PostreSQL 
+- PostgreSQL 
 - SeatGeek API
 - Google Calendar API
 
